@@ -1,35 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Megha ❤️ Valentine</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine 💘</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
-
 <body>
 
-<audio id="music" loop>
-  <source src="khairiyat.mp3" type="audio/mpeg">
-</audio>
+<!-- AUDIO -->
+<audio id="loveAudio" src="khairiyat.mp3" preload="auto"></audio>
+<audio id="noSound" src="no.mp3" preload="auto"></audio>
+<audio id="yesSound" src="yes.mp3" preload="auto"></audio>
 
-<div class="card" id="card">
+<!-- FLOATING HEARTS -->
+<div id="hearts"></div>
 
-  <div class="header">
-    <h1 id="title">💘 Megha, will you be my Valentine?</h1>
-    <p id="attempts">Attempts left: 10 / 10</p>
+<!-- QUIZ 1 -->
+<div class="screen" id="quiz1">
+  <div class="content">
+    <h1>Question 1 💭</h1>
+    <p class="question">When did we meet for the 1st time?</p>
+    <div class="options">
+      <button class="opt">2 July 2024</button>
+      <button class="opt">07 July 2024</button>
+      <button class="opt correct">21 July 2024</button>
+      <button class="opt">24 July 2024</button>
+    </div>
+    <p class="msg"></p>
   </div>
+</div>
 
-  <div class="yes-zone" id="yesZone">
-    <button id="yesBtn">Yes ❤️</button>
+<!-- QUIZ 2 -->
+<div class="screen hidden" id="quiz2">
+  <div class="content">
+    <h1>Question 2 😅</h1>
+    <p class="question">What makes me smile?</p>
+    <div class="options">
+      <button class="opt">Technologia</button>
+      <button class="opt">Money</button>
+      <button class="opt correct">Your Smile</button>
+      <button class="opt">Your anger</button>
+    </div>
+    <p class="msg"></p>
   </div>
+</div>
 
-  <div class="no-zone" id="noZone">
-    <button id="noBtn">No 😐</button>
+<!-- QUIZ 3 -->
+<div class="screen hidden" id="quiz3">
+  <div class="content">
+    <h1>Final Question 💖</h1>
+    <p class="question">Who loves whom more?</p>
+    <div class="options">
+      <button class="opt">You love me more ❤️</button>
+      <button class="opt">Equal</button>
+      <button class="opt">Bhagwan Jane 🙌</button>
+      <button class="opt correct">I love you more 😌</button>
+    </div>
+    <p class="msg"></p>
   </div>
+</div>
 
+<!-- GAME -->
+<div class="screen hidden" id="gameScreen">
+  <div class="content">
+
+    <div class="question-block">
+      <h1>💘 Megha, you know me so well 🥹💖</h1>
+      <h1>You came this far… 😌✨</h1>
+      <h1>Will you be my Valentine? 💍💞</h1>
+    </div>
+
+    <p id="attempts">Attempts left: 10 / 10 😏</p>
+
+    <div class="button-wrapper">
+      <div id="yesZone" class="glow">
+        <button id="yesBtn">YES 💖😍</button>
+      </div>
+
+      <div class="no-wrapper">
+        <button id="noBtn">NO 🙈🏃‍♀️</button>
+      </div>
+    </div>
+
+    <p id="destinyMsg"></p>
+  </div>
+</div>
+
+<!-- FINAL -->
+<div class="screen hidden" id="finalScreen">
+  <div class="content">
+    <img id="slideshow" src="megha1.jpg" alt="Megha">
+    <div class="letter">
+      <p>Meri pyaari Megha ❤️🥰</p>
+      <p>Tum meri life ka wo hissa ho jahan har din thoda zyada sukoon milta hai 😌💖</p>
+      <p>Tumhari smile meri strength hai 😍, tumhara saath meri sabse badi blessing 💞✨</p>
+      <p>Har Valentine 💘, har din 🌸, main tumhe thoda aur pyaar karunga 💍❤️</p>
+      <p>Forever yours 💖,<br>Your Valentine 💘</p>
+    </div>
+  </div>
 </div>
 
 <script src="script.js"></script>
