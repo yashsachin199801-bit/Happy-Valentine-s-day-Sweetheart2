@@ -1,88 +1,132 @@
-const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
-const playground = document.getElementById("playground");
-const attemptsText = document.getElementById("attempts");
+/* ========== QUIZ ========== */
 
-const audio = new Audio("music.mp3");
-audio.loop = true;
-
-let attemptsLeft = 10;
-let yesScale = 1;
-
-const noTexts = [
-  "Think again Megha 🤨",
-  "Really? 😐",
-  "Are you sure? 😳",
-  "Dil se socho ❤️",
-  "Mat bhaago 😅",
-  "Last chance 😬",
-  "Btau Abhi 😏",
-  "Ghoosa Pad jayega 😈",
-  "Na Mano 😳",
-  "Bas Megha 😌"
+const quizWrongMessages = [
+  "Oops 😜 try again",
+  "Hehe 😅 not this one",
+  "Aww 🥺 think harder",
+  "Almost 💭 but no",
+  "Dil se yaad karo ❤️"
 ];
 
-// 🔴 YES CLICK — MUSIC MUST START HERE
-yesBtn.addEventListener("click", () => {
-  audio.play().catch(err => {
-    console.log("Audio blocked:", err);
+const quizSteps = [
+  { id: "quiz1", next: "quiz2", wrong: 0 },
+  { id: "quiz2", next: "quiz3", wrong: 0 },
+  { id: "quiz3", next: "gameScreen", wrong: 0 }
+];
+
+quizSteps.forEach(step => {
+  const screen = document.getElementById(step.id);
+  const msg = screen.querySelector(".msg");
+
+  screen.querySelectorAll(".opt").forEach(btn => {
+    btn.onclick = () => {
+      if (btn.classList.contains("correct")) {
+        msg.textContent = "";
+        screen.classList.add("hidden");
+        document.getElementById(step.next).classList.remove("hidden");
+        if (step.next === "gameScreen") resetNo();
+      } else {
+        msg.textContent = quizWrongMessages[step.wrong];
+        step.wrong = (step.wrong + 1) % quizWrongMessages.length;
+      }
+    };
   });
-
-  document.body.innerHTML = `
-    <div style="
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:linear-gradient(180deg,#ff7eb3,#ff9dcf);
-      color:white;
-      font-size:32px;
-      font-weight:bold;
-      text-align:center;
-      padding:20px;
-    ">
-      💖 YAY! SHE SAID YES 💖
-    </div>
-  `;
 });
 
-// 🟠 NO CLICK
-noBtn.addEventListener("click", () => {
-  attemptsLeft--;
-  attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10`;
+/* ========== GAME ========== */
 
-  // Change NO text
-  const index = Math.min(10 - attemptsLeft, noTexts.length - 1);
-  noBtn.textContent = noTexts[index];
+const noBtn = document.getElementById("noBtn");
+const noWrapper = document.querySelector(".no-wrapper");
+const yesZone = document.getElementById("yesZone");
+const yesBtn = document.getElementById("yesBtn");
 
-  // YES grows exponentially
-  yesScale *= 1.35;
+const attemptsText = document.getElementById("attempts");
+const destinyMsg = document.getElementById("destinyMsg");
+const loveAudio = document.getElementById("loveAudio");
+const noSound = document.getElementById("noSound");
+const yesSound = document.getElementById("yesSound");
 
-  // Calculate max size so it never overlaps question
-  const playgroundRect = playground.getBoundingClientRect();
-  const maxHeight = playgroundRect.height * 0.8;
+let attemptsLeft = 10;
+let yesW = 180;
+let yesH = 70;
 
-  yesBtn.style.transform = `scale(${yesScale})`;
-  yesBtn.style.maxHeight = `${maxHeight}px`;
-  yesBtn.style.width = "90%";
+const noMessages = [
+  "Hehe 😅 missed me",
+  "Still NO? 😐",
+  "Dil maanta nahi ❤️",
+  "Bas maan jao na 🥺",
+  "Destiny calling 😌",
+  "Ab toh YES likha hai 💫",
+  "Running won’t help 😏",
+  "Almost 😈",
+  "Last chance 😬",
+  "Destiny chose us ❤️💍"
+];
 
-  // Move NO safely inside playground
-  moveNoButton();
-});
+function resetNo() {
+  noBtn.style.left = "0px";
+  noBtn.style.top = "0px";
+}
 
-function moveNoButton() {
-  const pg = playground.getBoundingClientRect();
-  const nb = noBtn.getBoundingClientRect();
+function moveNo() {
+  const area = noWrapper.getBoundingClientRect();
+  const btn = noBtn.getBoundingClientRect();
 
-  const padding = 16;
+  const x = Math.random() * (area.width - btn.width);
+  const y = Math.random() * (area.height - btn.height);
 
-  const maxX = pg.width - nb.width - padding;
-  const maxY = pg.height - nb.height - padding;
-
-  const x = Math.random() * maxX;
-  const y = Math.random() * maxY;
-
-  noBtn.style.position = "absolute";
   noBtn.style.left = `${x}px`;
   noBtn.style.top = `${y}px`;
 }
+
+noBtn.onclick = () => {
+  attemptsLeft--;
+  attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10 😏`;
+  destinyMsg.textContent = noMessages[10 - attemptsLeft - 1];
+  destinyMsg.style.opacity = 1;
+
+  noSound.currentTime = 0;
+  noSound.play().catch(()=>{});
+
+  if (attemptsLeft <= 0) {
+    noBtn.style.display = "none";
+    destinyMsg.textContent =
+      "There is no more running… destiny has chosen us ❤️💍✨";
+    return;
+  }
+
+  moveNo();
+
+  if (yesW < window.innerWidth * 0.9) yesW += 28;
+  if (yesH < 200) yesH += 14;
+  yesZone.style.width = `${yesW}px`;
+  yesZone.style.height = `${yesH}px`;
+};
+
+yesBtn.onclick = () => {
+  yesSound.play().catch(()=>{});
+  loveAudio.play().catch(()=>{});
+
+  confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+
+  document.getElementById("gameScreen").classList.add("hidden");
+  document.getElementById("finalScreen").classList.remove("hidden");
+
+  let i = 0;
+  setInterval(() => {
+    i = (i + 1) % 4;
+    document.getElementById("slideshow").src = `megha${i + 1}.jpg`;
+  }, 2500);
+};
+
+/* ========== FLOATING HEARTS ========== */
+
+const heartBox = document.getElementById("hearts");
+
+setInterval(() => {
+  const heart = document.createElement("span");
+  heart.textContent = "💖";
+  heart.style.left = Math.random() * 100 + "vw";
+  heartBox.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}, 600);
