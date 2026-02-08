@@ -4,13 +4,13 @@ const loveAudio = document.getElementById("loveAudio");
 const noSound = document.getElementById("noSound");
 const yesSound = document.getElementById("yesSound");
 
-/* Ensure audio can be played */
+/* Preload and prepare audio */
 [loveAudio, noSound, yesSound].forEach(a => {
   a.preload = "auto";
   a.load();
 });
 
-/* ================= QUIZ ================= */
+/* ================= QUIZ SECTION ================= */
 
 const quizWrongMessages = [
   "Oops 😜 try again",
@@ -32,20 +32,33 @@ quizSteps.forEach(step => {
 
   screen.querySelectorAll(".opt").forEach(btn => {
     btn.addEventListener("click", () => {
-      if (btn.classList.contains("correct")) {
-        msg.textContent = "";
-        screen.classList.add("hidden");
-        document.getElementById(step.next).classList.remove("hidden");
-        if (step.next === "gameScreen") resetNo();
-      } else {
+
+      /* ❌ WRONG MCQ OPTION */
+      if (!btn.classList.contains("correct")) {
+        noSound.currentTime = 0;
+        noSound.play().catch(() => {});
+
         msg.textContent = quizWrongMessages[step.wrong];
         step.wrong = (step.wrong + 1) % quizWrongMessages.length;
+        return;
+      }
+
+      /* ✅ CORRECT MCQ OPTION */
+      yesSound.currentTime = 0;
+      yesSound.play().catch(() => {});
+
+      msg.textContent = "";
+      screen.classList.add("hidden");
+      document.getElementById(step.next).classList.remove("hidden");
+
+      if (step.next === "gameScreen") {
+        resetNo();
       }
     });
   });
 });
 
-/* ================= GAME ================= */
+/* ================= GAME SECTION ================= */
 
 const noBtn = document.getElementById("noBtn");
 const noWrapper = document.querySelector(".no-wrapper");
@@ -88,9 +101,8 @@ function moveNo() {
   noBtn.style.top = `${y}px`;
 }
 
-/* NO BUTTON */
+/* ❌ NO BUTTON */
 noBtn.addEventListener("click", () => {
-  // 🔊 Play NO sound (direct user gesture)
   noSound.currentTime = 0;
   noSound.play().catch(() => {});
 
@@ -113,13 +125,11 @@ noBtn.addEventListener("click", () => {
   yesZone.style.height = `${yesH}px`;
 });
 
-/* YES BUTTON */
+/* ✅ YES BUTTON */
 yesBtn.addEventListener("click", () => {
-  // 🔊 Play YES sound
   yesSound.currentTime = 0;
   yesSound.play().catch(() => {});
 
-  // 🎵 Play background music
   loveAudio.currentTime = 0;
   loveAudio.play().catch(() => {});
 
