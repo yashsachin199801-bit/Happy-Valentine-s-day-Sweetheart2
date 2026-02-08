@@ -1,30 +1,14 @@
-/* ================= AUDIO UNLOCK (CORRECT) ================= */
+/* ================= AUDIO ELEMENTS ================= */
 
 const loveAudio = document.getElementById("loveAudio");
 const noSound = document.getElementById("noSound");
 const yesSound = document.getElementById("yesSound");
 
-let audioUnlocked = false;
-
-function unlockAudio() {
-  if (audioUnlocked) return;
-
-  [loveAudio, noSound, yesSound].forEach(a => {
-    try {
-      a.play();
-      setTimeout(() => {
-        a.pause();
-        a.currentTime = 0;
-      }, 50);
-    } catch (e) {}
-  });
-
-  audioUnlocked = true;
-}
-
-/* Unlock on FIRST real user interaction */
-document.addEventListener("click", unlockAudio, { once: true });
-document.addEventListener("touchstart", unlockAudio, { once: true });
+/* Ensure audio can be played */
+[loveAudio, noSound, yesSound].forEach(a => {
+  a.preload = "auto";
+  a.load();
+});
 
 /* ================= QUIZ ================= */
 
@@ -47,9 +31,7 @@ quizSteps.forEach(step => {
   const msg = screen.querySelector(".msg");
 
   screen.querySelectorAll(".opt").forEach(btn => {
-    btn.onclick = () => {
-      unlockAudio();
-
+    btn.addEventListener("click", () => {
       if (btn.classList.contains("correct")) {
         msg.textContent = "";
         screen.classList.add("hidden");
@@ -59,7 +41,7 @@ quizSteps.forEach(step => {
         msg.textContent = quizWrongMessages[step.wrong];
         step.wrong = (step.wrong + 1) % quizWrongMessages.length;
       }
-    };
+    });
   });
 });
 
@@ -106,15 +88,15 @@ function moveNo() {
   noBtn.style.top = `${y}px`;
 }
 
-noBtn.onclick = () => {
-  unlockAudio();
+/* NO BUTTON */
+noBtn.addEventListener("click", () => {
+  // 🔊 Play NO sound (direct user gesture)
+  noSound.currentTime = 0;
+  noSound.play().catch(() => {});
 
   attemptsLeft--;
   attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10 😏`;
   destinyMsg.textContent = noMessages[10 - attemptsLeft - 1];
-
-  noSound.currentTime = 0;
-  noSound.play().catch(()=>{});
 
   if (attemptsLeft <= 0) {
     noBtn.style.display = "none";
@@ -129,16 +111,17 @@ noBtn.onclick = () => {
   if (yesH < 200) yesH += 14;
   yesZone.style.width = `${yesW}px`;
   yesZone.style.height = `${yesH}px`;
-};
+});
 
-yesBtn.onclick = () => {
-  unlockAudio();
-
+/* YES BUTTON */
+yesBtn.addEventListener("click", () => {
+  // 🔊 Play YES sound
   yesSound.currentTime = 0;
-  yesSound.play().catch(()=>{});
+  yesSound.play().catch(() => {});
 
+  // 🎵 Play background music
   loveAudio.currentTime = 0;
-  loveAudio.play().catch(()=>{});
+  loveAudio.play().catch(() => {});
 
   confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
 
@@ -150,4 +133,4 @@ yesBtn.onclick = () => {
     i = (i + 1) % 4;
     document.getElementById("slideshow").src = `megha${i + 1}.jpg`;
   }, 2500);
-};
+});
