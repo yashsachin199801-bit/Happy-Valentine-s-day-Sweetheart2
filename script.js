@@ -4,7 +4,6 @@ const loveAudio = document.getElementById("loveAudio");
 const noSound = document.getElementById("noSound");
 const yesSound = document.getElementById("yesSound");
 
-/* Preload and prepare audio */
 [loveAudio, noSound, yesSound].forEach(a => {
   a.preload = "auto";
   a.load();
@@ -33,7 +32,7 @@ quizSteps.forEach(step => {
   screen.querySelectorAll(".opt").forEach(btn => {
     btn.addEventListener("click", () => {
 
-      /* ❌ WRONG MCQ OPTION */
+      /* ❌ WRONG MCQ */
       if (!btn.classList.contains("correct")) {
         noSound.currentTime = 0;
         noSound.play().catch(() => {});
@@ -43,17 +42,20 @@ quizSteps.forEach(step => {
         return;
       }
 
-      /* ✅ CORRECT MCQ OPTION */
+      /* ✅ CORRECT MCQ */
       yesSound.currentTime = 0;
       yesSound.play().catch(() => {});
 
-      msg.textContent = "";
-      screen.classList.add("hidden");
-      document.getElementById(step.next).classList.remove("hidden");
+      // ⏱ allow sound to start before DOM change
+      setTimeout(() => {
+        msg.textContent = "";
+        screen.classList.add("hidden");
+        document.getElementById(step.next).classList.remove("hidden");
 
-      if (step.next === "gameScreen") {
-        resetNo();
-      }
+        if (step.next === "gameScreen") {
+          resetNo();
+        }
+      }, 150);
     });
   });
 });
