@@ -1,4 +1,33 @@
-/* ========== QUIZ ========== */
+/* ================= AUDIO UNLOCK ================= */
+
+const loveAudio = document.getElementById("loveAudio");
+const noSound = document.getElementById("noSound");
+const yesSound = document.getElementById("yesSound");
+
+let audioUnlocked = false;
+
+function unlockAudio() {
+  if (audioUnlocked) return;
+
+  [loveAudio, noSound, yesSound].forEach(a => {
+    try {
+      a.volume = 0;
+      a.play().then(() => {
+        a.pause();
+        a.currentTime = 0;
+        a.volume = 1;
+      }).catch(() => {});
+    } catch {}
+  });
+
+  audioUnlocked = true;
+}
+
+/* Unlock on first user interaction (ANY tap/click) */
+document.addEventListener("click", unlockAudio, { once: true });
+document.addEventListener("touchstart", unlockAudio, { once: true });
+
+/* ================= QUIZ ================= */
 
 const quizWrongMessages = [
   "Oops 😜 try again",
@@ -20,6 +49,8 @@ quizSteps.forEach(step => {
 
   screen.querySelectorAll(".opt").forEach(btn => {
     btn.onclick = () => {
+      unlockAudio();
+
       if (btn.classList.contains("correct")) {
         msg.textContent = "";
         screen.classList.add("hidden");
@@ -33,7 +64,7 @@ quizSteps.forEach(step => {
   });
 });
 
-/* ========== GAME ========== */
+/* ================= GAME ================= */
 
 const noBtn = document.getElementById("noBtn");
 const noWrapper = document.querySelector(".no-wrapper");
@@ -42,9 +73,6 @@ const yesBtn = document.getElementById("yesBtn");
 
 const attemptsText = document.getElementById("attempts");
 const destinyMsg = document.getElementById("destinyMsg");
-const loveAudio = document.getElementById("loveAudio");
-const noSound = document.getElementById("noSound");
-const yesSound = document.getElementById("yesSound");
 
 let attemptsLeft = 10;
 let yesW = 180;
@@ -80,10 +108,11 @@ function moveNo() {
 }
 
 noBtn.onclick = () => {
+  unlockAudio();
+
   attemptsLeft--;
   attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10 😏`;
   destinyMsg.textContent = noMessages[10 - attemptsLeft - 1];
-  destinyMsg.style.opacity = 1;
 
   noSound.currentTime = 0;
   noSound.play().catch(()=>{});
@@ -104,7 +133,11 @@ noBtn.onclick = () => {
 };
 
 yesBtn.onclick = () => {
+  unlockAudio();
+
+  yesSound.currentTime = 0;
   yesSound.play().catch(()=>{});
+
   loveAudio.play().catch(()=>{});
 
   confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
@@ -118,15 +151,3 @@ yesBtn.onclick = () => {
     document.getElementById("slideshow").src = `megha${i + 1}.jpg`;
   }, 2500);
 };
-
-/* ========== FLOATING HEARTS ========== */
-
-const heartBox = document.getElementById("hearts");
-
-setInterval(() => {
-  const heart = document.createElement("span");
-  heart.textContent = "💖";
-  heart.style.left = Math.random() * 100 + "vw";
-  heartBox.appendChild(heart);
-  setTimeout(() => heart.remove(), 6000);
-}, 600);
