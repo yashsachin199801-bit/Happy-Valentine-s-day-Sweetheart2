@@ -1,4 +1,4 @@
-/* ================= AUDIO UNLOCK ================= */
+/* ================= AUDIO UNLOCK (CORRECT) ================= */
 
 const loveAudio = document.getElementById("loveAudio");
 const noSound = document.getElementById("noSound");
@@ -11,19 +11,18 @@ function unlockAudio() {
 
   [loveAudio, noSound, yesSound].forEach(a => {
     try {
-      a.volume = 0;
-      a.play().then(() => {
+      a.play();
+      setTimeout(() => {
         a.pause();
         a.currentTime = 0;
-        a.volume = 1;
-      }).catch(() => {});
-    } catch {}
+      }, 50);
+    } catch (e) {}
   });
 
   audioUnlocked = true;
 }
 
-/* Unlock on first user interaction (ANY tap/click) */
+/* Unlock on FIRST real user interaction */
 document.addEventListener("click", unlockAudio, { once: true });
 document.addEventListener("touchstart", unlockAudio, { once: true });
 
@@ -138,6 +137,7 @@ yesBtn.onclick = () => {
   yesSound.currentTime = 0;
   yesSound.play().catch(()=>{});
 
+  loveAudio.currentTime = 0;
   loveAudio.play().catch(()=>{});
 
   confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
