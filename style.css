@@ -1,0 +1,124 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #ff5f9e, #ff85b3);
+  color: white;
+}
+
+/* CARD */
+.card {
+  min-height: 100vh;
+  max-width: 420px;
+  margin: auto;
+  background: rgba(255,255,255,0.18);
+  border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER */
+.header {
+  padding: 24px 20px 12px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+#attempts {
+  font-size: 15px;
+}
+
+/* YES ZONE */
+.yes-zone {
+  position: relative;
+  height: 180px;
+  transition: height 0.25s ease;
+  overflow: hidden;
+}
+
+/* YES BUTTON — TRUE CENTER */
+#yesBtn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center;
+
+  background: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  font-size: 18px;
+  padding: 18px 50px;
+  cursor: pointer;
+
+  max-width: 90%;
+  white-space: nowrap;
+  transition: transform 0.2s ease;
+}
+
+/* NO ZONE */
+.no-zone {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* NO BUTTON */
+#noBtn {
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 22px;
+  font-size: 15px;
+  cursor: pointer;
+  max-width: 80%;
+  text-align: center;
+  transition: left 0.25s ease, top 0.25s ease;
+}
+/* 💓 YES HEARTBEAT */
+@keyframes heartbeat {
+  0%   { transform: translate(-50%, -50%) scale(var(--sx), var(--sy)); }
+  25%  { transform: translate(-50%, -50%) scale(calc(var(--sx) * 1.03), calc(var(--sy) * 1.03)); }
+  50%  { transform: translate(-50%, -50%) scale(var(--sx), var(--sy)); }
+  75%  { transform: translate(-50%, -50%) scale(calc(var(--sx) * 1.04), calc(var(--sy) * 1.04)); }
+  100% { transform: translate(-50%, -50%) scale(var(--sx), var(--sy)); }
+}
+
+.heartbeat {
+  animation: heartbeat 1.2s infinite ease-in-out;
+  box-shadow: 0 0 25px rgba(46, 204, 113, 0.7);
+}
+
+/* 😵 NO SHAKE */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.4s ease;
+}
