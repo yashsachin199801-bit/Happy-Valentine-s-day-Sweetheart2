@@ -70,7 +70,7 @@ const yesBtn = document.getElementById("yesBtn");
 const attemptsText = document.getElementById("attempts");
 const destinyMsg = document.getElementById("destinyMsg");
 
-let attemptsLeft = 10;
+let attemptsLeft = 5;
 let yesW = 180;
 let yesH = 70;
 
@@ -109,8 +109,8 @@ noBtn.addEventListener("click", () => {
   noSound.play().catch(() => {});
 
   attemptsLeft--;
-  attemptsText.textContent = `Attempts left: ${attemptsLeft} / 10 😏`;
-  destinyMsg.textContent = noMessages[10 - attemptsLeft - 1];
+  attemptsText.textContent = `Attempts left: ${attemptsLeft} / 5 😏`;
+  destinyMsg.textContent = noMessages[5 - attemptsLeft - 1];
 
   if (attemptsLeft <= 0) {
     noBtn.style.display = "none";
@@ -121,8 +121,8 @@ noBtn.addEventListener("click", () => {
 
   moveNo();
 
-  if (yesW < window.innerWidth * 0.9) yesW += 28;
-  if (yesH < 200) yesH += 14;
+  if (yesW < window.innerWidth * 0.9) yesW += 38;
+  if (yesH < 200) yesH += 20;
   yesZone.style.width = `${yesW}px`;
   yesZone.style.height = `${yesH}px`;
 });
@@ -135,7 +135,7 @@ yesBtn.addEventListener("click", () => {
   loveAudio.currentTime = 0;
   loveAudio.play().catch(() => {});
 
-  confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+  confetti({ particleCount: 450, spread: 110, origin: { y: 0.6 } });
 
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("finalScreen").classList.remove("hidden");
