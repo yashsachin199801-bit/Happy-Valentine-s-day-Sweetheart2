@@ -135,7 +135,7 @@ yesBtn.addEventListener("click", () => {
   loveAudio.currentTime = 0;
   loveAudio.play().catch(() => {});
 
-  confetti({ particleCount: 1000, spread: 300, origin: { y: 0.6 } });
+  confetti({ particleCount: 1000, spread: 100, origin: { y: 0.6 } });
 
   document.getElementById("gameScreen").classList.add("hidden");
   document.getElementById("finalScreen").classList.remove("hidden");
